@@ -1,0 +1,21 @@
+@base = http://team-pegasus-api-team-pegasus.jp1-bootcamp-6ccd7f378ae819553d37d5f2ee142bd6-0000.jp-tok.containers.appdomain.cloud
+
+### ---------------------------------------------
+### Balance Inquiry
+### ---------------------------------------------
+GET {{base}}
+Content-Type: application/json
+Accept : application/json
+
+{}
+
+### ---------------------------------------------
+### Statements Inquiry
+### ---------------------------------------------
+POST {{base}}/discovery/search
+Content-Type: application/json
+Accept : application/json
+
+{
+  "searchText": "クラウド"
+}
