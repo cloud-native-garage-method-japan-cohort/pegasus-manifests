@@ -3,7 +3,7 @@ kind: Pipeline
 metadata:
   annotations:
     app.openshift.io/runtime: nodejs
-  name: team-pegasus-pipeline
+  name: api-pipeline
 spec:
   workspaces:
     - name: pipeline-shared-data
