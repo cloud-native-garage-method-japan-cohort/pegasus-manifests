@@ -73,7 +73,7 @@ spec:
       workspaces:
         - name: source
           workspace: pipeline-shared-data
-    - name: test-deploy
+    - name: api-deploy
       runAfter:
         - kustomize-build
       params:
