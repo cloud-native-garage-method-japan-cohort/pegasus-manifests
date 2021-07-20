@@ -1,0 +1,26 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: create-card-to-trello-board
+spec:
+  steps:
+    - name: push-card
+      image: dwdraju/alpine-curl-jq
+      resources: {}
+      script: |
+
+        API_KEY=''
+        TOKEN=''
+        TARGET_BOARD=''
+        TARGET_LIST=''
+        BY_WHOM=''
+        CARD_NAME='tekton'
+        CARD_DESC='test'
+
+        CARD_ID=$(curl -X POST \
+          "https://api.trello.com/1/cards?key=$API_KEY&token=$TOKEN&idList=$TARGET_LIST" | \
+          jq -r ".id")
+        
+        curl -X PUT -H 'Accept: application/json'\
+          "https://api.trello.com/1/cards/$CARD_ID?key=$API_KEY&token=$TOKEN&name=\"$CARD_NAME\"&desc=\"$CARD_DESC\""
+  
