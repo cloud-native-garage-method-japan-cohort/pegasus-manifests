@@ -24,7 +24,7 @@ spec:
         APP_NAMESPACE="$(params.app-namespace)"
 
         echo -e "Deploying into: ${APP_NAMESPACE}"
-        kubectl apply -n ${APP_NAMESPACE} -f ./manifests.yaml --validate=false > results.out
+        kubectl apply -n ${APP_NAMESPACE} -f ./kubernetes/manifests.yaml --validate=false > results.out
         cat results.out
     - name: verify-deploy
       image: docker.io/enzobarrett/kubectl:latest
