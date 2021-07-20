@@ -17,6 +17,7 @@ spec:
         #cd source/k8s
         kustomize edit set image $(params.image-with-tag)
         kustomize build > manifests.yaml
+        cp -p ./manifests.yaml ./source/
         if [ -f manifests.yaml ]; then
           echo "manifests.yaml successfully generated"
         else

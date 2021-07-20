@@ -7,29 +7,40 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: builder
+  name: deployer
 rules:
   - apiGroups:
-      - image.openshift.io
+      - apps
     resources:
-      - imagestreams
+      - deployments
     verbs:
-      - "*"
+      - get
+      - create
+      - list
+      - patch
+      - watch
   - apiGroups:
-      - image.openshift.io
+      - route.openshift.io
     resources:
-      - "imagestreams/layers"
+      - routes
     verbs:
-      - "*"
+      - get
+      - create
+  - apiGroups:
+      - ""
+    resources:
+      - services
+    verbs:
+      - patch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: builder
+  name: deployer
 subjects:
   - kind: ServiceAccount
     name: build-bot
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: builder
+  name: deployer
