@@ -9,6 +9,11 @@ spec:
     - name: pipeline-shared-data
       description: |
         This workspace stores the cloned repository and is available to all steps
+  params:
+    - name: image-repo
+      type: string
+      description: Docker image name
+      default: quay.io/ibmyuhanlin/pegasus-api
   tasks:
     - name: clone-repository
       params:
@@ -44,3 +49,15 @@ spec:
             - test
       runAfter:
         - install-dependencies
+    - name: build-image
+      runAfter:
+        - run-tests
+      params:
+        - name: IMAGE
+          value: "$(params.image-repo):$(tasks.clone-repository.results.commit)"
+      taskRef:
+        kind: Task
+        name: buildah
+      workspaces:
+        - name: source
+          workspace: pipeline-shared-data
