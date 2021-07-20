@@ -61,3 +61,29 @@ spec:
       workspaces:
         - name: source
           workspace: pipeline-shared-data
+    - name: kustomize-build
+      runAfter:
+        - build-image
+      params:
+        - name: image-with-tag
+          value: "quay.io/ibmyuhanlin/pegasus-api=$(params.image-repo):$(tasks.clone-repository.results.commit)"
+      taskRef:
+        kind: Task
+        name: kustomize-build-api
+      workspaces:
+        - name: source
+          workspace: pipeline-shared-data
+    - name: test-deploy
+      runAfter:
+        - kustomize-build
+      params:
+        - name: app-namespace
+          value: team-pegasus
+        - name: app-name
+          value: team-pegasus-api
+      taskRef:
+        kind: Task
+        name: test-deploy
+      workspaces:
+        - name: source
+          workspace: pipeline-shared-data
