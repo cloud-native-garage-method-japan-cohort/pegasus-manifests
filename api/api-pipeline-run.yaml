@@ -11,4 +11,4 @@ spec:
   workspaces:
     - name: pipeline-shared-data
       persistentVolumeClaim:
-        claimName: team-pegasus-api-pvc
+        claimName: team-pegasus-api-pvc2

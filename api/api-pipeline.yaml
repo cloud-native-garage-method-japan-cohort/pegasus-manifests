@@ -114,10 +114,10 @@ spec:
           - image: dwdraju/alpine-curl-jq
             name: api-pipeline-check-status
             script: |
-              API_KEY='4556b7c469f5912a5506360a2aec268e'
-              TOKEN='9c6e06592cba182f5977a4bbac24d09ef50afb9fb61951e91f79240366e160ec'
-              TARGET_BOARD='60f503e32ffa1a2ee37c1cbd'
-              TARGET_LIST='60f77bcbbdce63891ca9ab1f'
+              API_KEY=''
+              TOKEN=''
+              TARGET_BOARD=''
+              TARGET_LIST=''
               PIPELINE_ENV="pegasus-api"
               CARD_NAME="Pipeline Failed"
               CARD_DESC=""
