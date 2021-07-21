@@ -3,7 +3,7 @@ apiVersion: v1
 metadata:
   annotations:
     volume.beta.kubernetes.io/storage-provisioner: ibm.io/ibmc-block
-  name: team-pegasus-api-pvc
+  name: team-pegasus-api-pvc2
   namespace: team-pegasus
 spec:
   accessModes:
