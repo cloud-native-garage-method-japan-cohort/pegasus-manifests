@@ -87,3 +87,73 @@ spec:
       workspaces:
         - name: source
           workspace: pipeline-shared-data
+  finally:
+    - name: api-final-task
+      params: 
+        - name: clone-repository-status
+          value: "$(tasks.clone-repository.status)"
+        - name: install-dependencies-status
+          value: "$(tasks.install-dependencies.status)"
+        - name: run-tests-status
+          value: "$(tasks.run-tests.status)"
+        - name: build-image-status
+          value: "$(tasks.build-image.status)"
+        - name: kustomize-build-status
+          value: "$(tasks.kustomize-build.status)"
+        - name: test-deploy-status
+          value: "$(tasks.test-deploy.status)"
+      taskSpec:
+        params:
+         - name: clone-repository-status
+         - name: install-dependencies-status
+         - name: run-tests-status
+         - name: build-image-status
+         - name: kustomize-build-status
+         - name: test-deploy-status
+        steps:
+          - image: dwdraju/alpine-curl-jq
+            name: api-pipeline-check-status
+            script: |
+              API_KEY='4556b7c469f5912a5506360a2aec268e'
+              TOKEN='9c6e06592cba182f5977a4bbac24d09ef50afb9fb61951e91f79240366e160ec'
+              TARGET_BOARD='60f503e32ffa1a2ee37c1cbd'
+              TARGET_LIST='60f77bcbbdce63891ca9ab1f'
+              PIPELINE_ENV="pegasus-api"
+              CARD_NAME="Pipeline Failed"
+              CARD_DESC=""
+
+              if [ $(params.clone-repository-status) == "Failed" ]; then
+                CARD_DESC="clone-repository task failed in $PIPELINE_ENV."
+              fi
+              if [ $(params.install-dependencies-status) == "Failed" ]; then
+                CARD_DESC="install-dependencies task failed in $PIPELINE_ENV."
+              fi
+              if [ $(params.run-tests-status) == "Failed" ]; then
+                CARD_DESC="run-tests task failed in $PIPELINE_ENV."
+              fi
+              if [ $(params.build-image-status) == "Failed" ]; then
+                CARD_DESC="build-image task failed in $PIPELINE_ENV."
+              fi
+              if [ $(params.kustomize-build-status) == "Failed" ]; then
+                CARD_DESC="kustomize-build task failed in $PIPELINE_ENV."
+              fi
+              if [ $(params.test-deploy-status) == "Failed" ]; then
+                CARD_DESC="test-deploy task failed in $PIPELINE_ENV."
+              fi
+
+              if [ -n "$CARD_DESC" ]; then
+                CARD_ID=$(\
+                  curl -X POST \
+                  "https://api.trello.com/1/cards?key=$API_KEY&token=$TOKEN&idList=$TARGET_LIST" | \
+                  jq -r ".id"\
+                )
+
+                curl -X PUT \
+                  -H 'Accept: application/json'\
+                  -G \
+                  --data key=$API_KEY \
+                  --data token=$TOKEN \
+                  --data-urlencode "name=$CARD_NAME" \
+                  --data-urlencode "desc=$CARD_DESC" \
+                  "https://api.trello.com/1/cards/$CARD_ID"  
+              fi
